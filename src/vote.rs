@@ -391,8 +391,8 @@ impl Component for VoteComponent {
             let encoded_call = format!("0x{}", hex::encode(&self.vote_call_bytes));
             let url = format!("https://polkadot.js.org/apps/?rpc=wss://rpc.ibp.network/kusama#/extrinsics/decode/{}", encoded_call);
             html!(
-                <div class="mb">
-                    <b>{"Encoded call data:"}</b> <br/>
+                <div>
+                    <b>{format!("Encoded call data for AYE vote with {} KSM + {} conviction:", &self.balance, &self.conviction)}</b> <br/>
                     <a class="encoded" href={url} target="_blank">{encoded_call}</a>
                 </div>
             )
@@ -485,9 +485,9 @@ impl Component for VoteComponent {
 
                 html!(
                     <>
-                        <div class="mb"><b>{"Enter AYE vote value (KSM):"}</b></div>
+                        <div class="mb"><b>{"Enter vote value in KSM:"}</b></div>
                         <input type="text" oninput={on_input_balance} class="mb" value={AttrValue::from(self.balance.to_string())}/>
-                        <div><b>{"Conviction:"}</b></div>
+                        <div class="mb"><b>{"Conviction:"}</b></div>
                         <div class="convictions" style="display: flex;">
                             { for Conviction::iter().map(|conviction| {
                                     let label = format!("Lock {}", conviction.clone());
@@ -502,6 +502,7 @@ impl Component for VoteComponent {
                             }
                         </div>
                         {vote_as_hex_html()}
+                        <br/>
                         <button class="button-primary" onclick={get_accounts_click}> {"=> Select an Account for Signing"} </button>
                     </>
                 )
@@ -582,7 +583,7 @@ impl Component for VoteComponent {
                         <h1>{"ref. "}<a class="header-link" href="https://kusama.subsquare.io/referenda/275" target="_blank">{"#275"}</a></h1>
                     </div>
                     <h4>
-                        {format!("Vote AYE with {} KSM and {} conviction", &self.balance, &self.conviction)}
+                        {"Vote AYE"}
                     </h4>
                     // {finalized_block_html}
                     {vote_html}
