@@ -63,7 +63,7 @@ impl VoteComponent {
 
     fn is_selected(&self, conviction: Conviction) -> String {
         if self.conviction == conviction {
-            return "selected".to_string();
+            return " selected".to_string();
         }
         "".to_string()
     }
@@ -393,7 +393,7 @@ impl Component for VoteComponent {
             html!(
                 <div class="mb">
                     <b>{"Encoded call data:"}</b> <br/>
-                    <a href={url} target="_blank">{encoded_call}</a>
+                    <a class="encoded" href={url} target="_blank">{encoded_call}</a>
                 </div>
             )
         };
@@ -471,7 +471,7 @@ impl Component for VoteComponent {
                         <div class="mb"><b>{"Enter a message for the \"remark\" call in the \"System\" pallet:"}</b></div>
                         <input oninput={on_input} class="mb" value={AttrValue::from(self.message.clone())}/>
                         {message_as_hex_html()}
-                        <button onclick={get_accounts_click}> {"=> Select an Account for Signing"} </button>
+                        <button class="button-primary" onclick={get_accounts_click}> {"=> Select an Account for Signing"} </button>
                     </>
                 )
             }
@@ -486,12 +486,12 @@ impl Component for VoteComponent {
                 html!(
                     <>
                         <div class="mb"><b>{"Enter AYE vote value (KSM):"}</b></div>
-                        <input oninput={on_input_balance} class="mb" value={AttrValue::from(self.balance.to_string())}/>
+                        <input type="text" oninput={on_input_balance} class="mb" value={AttrValue::from(self.balance.to_string())}/>
                         <div><b>{"Conviction:"}</b></div>
-                        <div class="mb" style="display: flex;">
+                        <div class="convictions" style="display: flex;">
                             { for Conviction::iter().map(|conviction| {
                                     let label = format!("Lock {}", conviction.clone());
-                                    let class = self.is_selected(conviction.clone());
+                                    let class = format!("button-primary{}", self.is_selected(conviction.clone()));
                                     let on_click_conviction = ctx.link().callback(move |_| Message::ChangeConviction(conviction.clone()));
                                     html! {
                                         <button class={class} onclick={on_click_conviction}>
@@ -502,7 +502,7 @@ impl Component for VoteComponent {
                             }
                         </div>
                         {vote_as_hex_html()}
-                        <button onclick={get_accounts_click}> {"=> Select an Account for Signing"} </button>
+                        <button class="button-primary" onclick={get_accounts_click}> {"=> Select an Account for Signing"} </button>
                     </>
                 )
             }
@@ -520,9 +520,8 @@ impl Component for VoteComponent {
                                 { for accounts.iter().enumerate().map(|(i, account)| {
                                     let sign_with_account = ctx.link().callback(move |_| Message::SignWithAccount(i));
                                     html! {
-                                        <button onclick={sign_with_account}>
+                                        <button class="button-primary" onclick={sign_with_account}>
                                             {&account.source} {" | "} {&account.name}<br/>
-                                            <small>{&account.address}</small>
                                         </button>
                                     }
                                 }) }
@@ -574,25 +573,27 @@ impl Component for VoteComponent {
         };
 
         html! {
-            <div>
-                <div class="header">
-                    <span class="kusama-logo">
-                        <img src="https://raw.githubusercontent.com/turboflakes/ref-275/main/assets/kusama_icon_shadow.svg" alt="kusama logo" />
-                    </span>
-                    <h1>{"ref. "}<a class="header-link" href="https://kusama.subsquare.io/referenda/275" target="_blank">{"#275"}</a></h1>
+            <div class="container">
+                <div class="top">
+                    <div class="header">
+                        <span class="kusama-logo">
+                            <img src="https://raw.githubusercontent.com/turboflakes/ref-275/main/assets/kusama_icon_shadow.svg" alt="kusama logo" />
+                        </span>
+                        <h1>{"ref. "}<a class="header-link" href="https://kusama.subsquare.io/referenda/275" target="_blank">{"#275"}</a></h1>
+                    </div>
+                    <h4>
+                        {format!("Vote AYE with {} KSM and {} conviction", &self.balance, &self.conviction)}
+                    </h4>
+                    // {finalized_block_html}
+                    {vote_html}
+                    {signer_account_html}
+                    {stage_html}
                 </div>
-                <h4>
-                    {format!("Vote AYE with {} KSM and {} conviction", &self.balance, &self.conviction)}
-                </h4>
-                // {finalized_block_html}
-                {vote_html}
-                {signer_account_html}
-                {stage_html}
                 <div class="footer">
+                    <div>{"© 2023 TurboFlakes"}</div>
                     <a class="github-logo" href="https://github.com/turboflakes/ref-275" target="_blank">
                         <img src="https://raw.githubusercontent.com/turboflakes/ref-275/main/assets/github.svg" alt="github logo" />
                     </a>
-                    <div class="powered">{"© 2023 Powered by TurboFlakes"}</div>
                 </div>
             </div>
         }
