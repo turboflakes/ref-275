@@ -589,7 +589,7 @@ impl Component for VoteComponent {
                 {signer_account_html}
                 {stage_html}
                 <div class="footer">
-                    <a class="github-logo" href="htps://github.com/turboflakes/ref-275" target="_blank">
+                    <a class="github-logo" href="https://github.com/turboflakes/ref-275" target="_blank">
                         <img src="https://raw.githubusercontent.com/turboflakes/ref-275/main/assets/github.svg" alt="github logo" />
                     </a>
                     <div class="powered">{"© 2023 Powered by TurboFlakes"}</div>
