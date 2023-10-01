@@ -1,5 +1,9 @@
 # ref-275
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/turboflakes/ref-275/blob/main/assets/ref-275-github-header.png">
+</p>
+
 `ref-275` is a small WASM app specifically to vote AYE on Kusama [Referendum #275](https://kusama.subsquare.io/referenda/275).
 
 ## Development / Build from Source
